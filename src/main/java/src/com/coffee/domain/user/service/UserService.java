@@ -30,4 +30,6 @@ public class UserService {
 		User user = userRepository.findUserByEmail(email);
 		return new MyUserDetail(user);
 	}
+	
+	//commit test
 }
