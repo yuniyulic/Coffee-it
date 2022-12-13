@@ -1,0 +1,60 @@
+https://cheese10yun.github.io/spring-guide-directory/
+
+
+
+전체적인 구조
+- domain : 도메인을 담당하는 디렉터리
+- global : 전체적인 설정을 관리
+- infra : 외부 인프라스트럭처를 관리
+
+
+domain
+- model 디렉터리
+	Domain Entity 객체들이 공통적으로 사용할 객체들로 구성
+	대표적으로 Embeddable 객체, Enum 객체 등
+	
+- member 디렉터리
+	api	:
+		컨트롤러 클래스들이 존재
+		외부 rest api로 프로젝트를 구성하는 경우가 많으니 api라고 지칭
+		Controller 같은 경우에는 ModelAndView를 리턴하는 느낌이 있어서 명시적으로 api라고 하는 게 더 직관적
+	domain :
+		도메인 엔티티에 대한 클래스로 구성
+		특정 도메인에만 속하는 Embeddable, Enum 같은 클래스도 구성
+	dto : 
+		주로 Request, Response 객체들로 구성
+	exception : 
+		해당 도메인이 발생시키는 Exception으로 구성
+		
+- application 디렉터리
+	도메인 객체와 외부 영역을 연결해주는 파사드와 같은 역할을 주로 담당하는 클래스로 구성
+	대표적으로 데이터베이스 트랜잭션을 처리를 진행
+	service 계층과 유사
+	디렉터리 이름을 service로 하지 않은 이유는 service로 했을 경우 xxxxService로 클래스 네임을 해야 한다는 강박관념이 생기기 때문에 application이라고 명명
+	
+- dao 디렉터리
+	repository 와 비슷
+	repository로 하지 않은 이유는 조회 전용 구현체들이 작성 많이 작성되는데 이러한 객체들은 DAO라는 표현이 더 직관적이라고 판단
+	Querydsl을 이용해서 Repository를 확장하는 등 Reopsitory를 DAO처럼 확장하기 때문에 dao 디렉터리 명이 더 직관적
+
+
+global
+- 프로젝트 전방위적으로 사용되는 객체들로 구성
+
+- common : 공통으로 사용되는 Value 객체들로 구성. 페이징 처리를 위한 Request, 공통된 응답을 주는 Response 객체들 존재
+- config : 스프링 각종 설정들로 구성
+- error : 예외 핸들링을 담당하는 클래스로 구성
+- util : 유틸성 클래스들이 위치
+
+- 그 밖에서 global하게 설정하는 것들을 위치시키면 됨
+
+
+infra
+- 인프라스트럭처 관련된 코드들로 구성
+- 인프라스트럭처는 대표적으로 이메일 알림, SMS 알림 등 외부 서비스에 대한 코드들이 존재
+- 그렇기 때문에 domain, global에 속하지 않음
+- global로 볼 수는 있지만 이 계층도 잘 관리해야 하는 대상이기에 별도의 디렉터리
+- 인프라스트럭처는 대체성을 강하게 가짐
+- 예를 들어 만약 국내 서비스만 취급한다고 하더라도 언제 다른 플랫폼으로 변경될지 모르니 이런 인프라스트럭처는 기계적으로 인터페이스를 두고 개발하는 것이 좋음
+
+
